@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mongo-db-container:
+    image: mongo
+    expose:
+      - 27017
+    env_file:
+      - mongoDb.env
+  mongo-express-container:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    env_file:
+      - mongoDbExpress.env
+    depends_on:
+      - "mongo-db-container"

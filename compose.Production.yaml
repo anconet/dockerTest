@@ -1,0 +1,5 @@
+version: '3.3'
+include:
+  - ./proxy/compose.Production.Proxy.yaml
+  - ./frontend/compose.Production.Frontend.yaml
+  - ./db/compose.Production.Db.yaml
