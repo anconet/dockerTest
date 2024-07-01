@@ -1,0 +1,7 @@
+version: '3'
+services:
+  frontend-container:
+    build: .
+    image: frontend-image:0.0.1
+    expose:
+      - 3000
