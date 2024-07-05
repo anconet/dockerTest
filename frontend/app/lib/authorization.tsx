@@ -21,16 +21,21 @@ export async function login(formData: { email: string, userid: string, password:
 
     //(Todo) hit user database
 
-    const expires = new Date(Date.now() + 10 * 1000)
-    const jwtPayload: typeJwtPayload = { email: formData.email, userid: formData.userid }
-    const signedJwtPayload = await signMyJwt(jwtPayload);
-    console.log("Click on the Welcome Page")
-    cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
     redirect("/")
 }
 
+export async function createSession(user:typeUser){
+
+    const expires = new Date(Date.now() + 10 * 1000)
+    const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
+    const signedJwtPayload = await signMyJwt(jwtPayload);
+    console.log("Click on the Welcome Page")
+    cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
+
+}
+
 function checkPayload(payload: JWTPayload): typeUser {
-    if (!("emails" in payload)) { throw new TypeError("No Email Address") }
+    if (!("email" in payload)) { throw new TypeError("No Email Address") }
     if (!("userid" in payload)) { throw new TypeError("No Userid") }
     const user: typeUser = { email: payload.email as string, userid: payload.userid as string }
     return user

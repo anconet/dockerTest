@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { getSession } from "./welcome/authorization";
+import { getSession } from "./lib/authorization";
 
 export default async function Main() {
   console.log("Main Page")
