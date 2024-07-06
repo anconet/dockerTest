@@ -20,18 +20,19 @@ function signMyJwt(jwtPayload: typeJwtPayload) {
 export async function login(formData: { email: string, userid: string, password: string }) {
 
     //(Todo) hit user database
-
+    createSession(formData)
     redirect("/")
 }
 
-export async function createSession(user:typeUser){
+export async function createSession(user: typeUser) {
 
     const expires = new Date(Date.now() + 10 * 1000)
-    const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
-    const signedJwtPayload = await signMyJwt(jwtPayload);
-    console.log("Click on the Welcome Page")
-    cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
-
+    if (user) {
+        const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
+        const signedJwtPayload = await signMyJwt(jwtPayload);
+        console.log("Click on the Welcome Page")
+        cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
+    }
 }
 
 function checkPayload(payload: JWTPayload): typeUser {
@@ -43,6 +44,7 @@ function checkPayload(payload: JWTPayload): typeUser {
 
 async function verifyThisJwt(jwt: string): Promise<JWTPayload> {
     const keyAsString = process.env.JWT_KEY
+    console.log(keyAsString)
     //const keyAsString = "dumb"
     const keyAsUint8 = new TextEncoder().encode(keyAsString)
 
