@@ -1,8 +1,15 @@
 import { MongoClient } from "mongodb"
-import http from "http"
+import express from "express"
+import cors from "cors"
 import { config as dotenvConfig } from "dotenv"
+const api = express()
+api.use(cors())
+api.use(express.json())
+
 dotenvConfig({ path: "../db/mongoDb.env" })
 dotenvConfig()
+
+const USER_DATABASE_SERVER_PORT = 3001
 
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD
@@ -18,9 +25,42 @@ const collection = db.collection(DATABASE_COLLECTION as string)
 
 type typeUser = { email: string, userid: string, password: string }
 
+api.listen(USER_DATABASE_SERVER_PORT, async () => {
+    console.log("Backend Server listening on port: ", USER_DATABASE_SERVER_PORT)
+
+    try {
+        await client.connect()
+        console.log("Backend Server onnected to the user database container!")
+    }
+    catch (error) {
+        console.log("Backed couldn't connect to the user database conatiner")
+        console.log(error)
+    }
+
+})
+
+api.post('/', async (request, response) => {
+    console.log("Got a POST")
+
+    const userToFind: typeUser = request.body as typeUser;
+    var localResponse: string
+    let result = await collection.find({ email: `${userToFind.email}` }).toArray()
+    if (result.length === 0) {
+        console.log(`${userToFind} not found`)
+        console.log(`Creating New User: ${userToFind}`)
+        await collection.insertOne(userToFind)
+        localResponse = "invalid"
+    } else {
+        console.log(`${userToFind} found!`)
+        localResponse = "valid"
+    }
+
+    response.json(localResponse)
+})
+
 async function main() {
-    console.log("Firing Up the Backend Server")
-    console.log(URI)
+    //console.log("Firing Up the Backend Server")
+    //console.log(URI)
     try {
         await client.connect()
         console.log("backend.ts/main: Connected to the database container!")
@@ -58,4 +98,4 @@ async function main() {
 
 }
 
-main()
+//main()
