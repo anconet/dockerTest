@@ -8,4 +8,6 @@ services:
     ports:
       - 3001:3001
     volumes:
+      # Setting up a map from the host hard drive where my dev files are on WSL to the container.
+      # This allows nodemon running inside the container to detect file changes and reload the server.
       - .:/backend
