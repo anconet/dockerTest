@@ -1,5 +1,5 @@
 "use client"
-import { login } from "../lib/authorization"
+import { login } from "../lib/authentication"
 
 export default function Welcome() {
     console.log("Welcome Page")

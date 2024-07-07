@@ -2,9 +2,11 @@
 import { JWTPayload, SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { verifyUser } from "@/app/lib/authentication"
+import { typeUser } from "@/types"
 
 type typeJwtPayload = { email: string, userid: string }
-type typeUser = typeJwtPayload | null
+
 
 function signMyJwt(jwtPayload: typeJwtPayload) {
     const keyAsString = process.env.JWT_KEY
@@ -17,22 +19,13 @@ function signMyJwt(jwtPayload: typeJwtPayload) {
         .sign(keyAsUint8);
 }
 
-export async function login(formData: { email: string, userid: string, password: string }) {
-
-    //(Todo) hit user database
-    createSession(formData)
-    redirect("/")
-}
-
 export async function createSession(user: typeUser) {
 
     const expires = new Date(Date.now() + 10 * 1000)
-    if (user) {
-        const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
-        const signedJwtPayload = await signMyJwt(jwtPayload);
-        console.log("Click on the Welcome Page")
-        cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
-    }
+    const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
+    const signedJwtPayload = await signMyJwt(jwtPayload);
+    console.log("Click on the Welcome Page")
+    cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
 }
 
 function checkPayload(payload: JWTPayload): typeUser {
@@ -54,7 +47,7 @@ async function verifyThisJwt(jwt: string): Promise<JWTPayload> {
     return result.payload
 }
 
-export async function getSession(): Promise<typeUser> {
+export async function getSession(): Promise<typeUser | null> {
     try {
         const session = cookies().get("session");
         if (session) {
