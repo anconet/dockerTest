@@ -1,9 +1,7 @@
 "use server"
 import { JWTPayload, SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import { verifyUser } from "@/app/lib/authentication"
-import { typeUser } from "@/types"
+import { typeUser } from "@/app/types"
 
 type typeJwtPayload = { email: string, userid: string }
 
@@ -24,7 +22,7 @@ export async function createSession(user: typeUser) {
     const expires = new Date(Date.now() + 10 * 1000)
     const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
     const signedJwtPayload = await signMyJwt(jwtPayload);
-    console.log("Click on the Welcome Page")
+    console.log("Authorization.tsx/createSession: ", user)
     cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
 }
 
@@ -37,12 +35,12 @@ function checkPayload(payload: JWTPayload): typeUser {
 
 async function verifyThisJwt(jwt: string): Promise<JWTPayload> {
     const keyAsString = process.env.JWT_KEY
-    console.log(keyAsString)
+    console.log("Authorization.tsx/verifyThisJwt:", keyAsString)
     //const keyAsString = "dumb"
     const keyAsUint8 = new TextEncoder().encode(keyAsString)
 
     const result = await jwtVerify(jwt, keyAsUint8)
-    console.log("Cookie Signature is valid")
+    console.log("Authorization.tsx/verifyThisJws: Cookie Signature is valid")
 
     return result.payload
 }
@@ -59,7 +57,7 @@ export async function getSession(): Promise<typeUser | null> {
         } else { return null }
 
     } catch (error) {
-        console.log("Final Error: ", error)
+        console.log("Authorization.tsx/getsession: Final Error: ", error)
         return null
     }
 }

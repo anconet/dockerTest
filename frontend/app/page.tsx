@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import { getSession } from "./lib/authorization";
 
 export default async function Main() {
@@ -10,6 +9,7 @@ export default async function Main() {
 
   if (session === null) { redirect("/welcome") }
   return (
-    < p > Main Page</p >
+    <div className="h-screen flex justify-center items-center">
+      < p > Main Page</p > </div>
   );
 }
