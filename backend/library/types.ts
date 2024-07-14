@@ -2,6 +2,7 @@ export type typeCommand = "CreateUser" | "VerifyUser"
 
 export type typeResponse =
     typeUser |
+    "valid" |
     "invalid-email-exists" |
     "invalid-command" |
     "invalid-email" |
@@ -23,3 +24,9 @@ export type typeUser = {
     name: string
 }
 
+export type typeUserEntry = {
+    email: string,
+    name: string,
+    passwordHash: string,
+
+}

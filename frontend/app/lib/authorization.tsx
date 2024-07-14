@@ -20,7 +20,7 @@ function signMyJwt(jwtPayload: typeJwtPayload) {
 export async function createSession(user: typeUser) {
 
     const expires = new Date(Date.now() + 10 * 1000)
-    const jwtPayload: typeJwtPayload = { email: user.email, userid: user.userid }
+    const jwtPayload: typeJwtPayload = { email: user.email, userid: user.name }
     const signedJwtPayload = await signMyJwt(jwtPayload);
     console.log("Authorization.tsx/createSession: ", user)
     cookies().set("session", signedJwtPayload, { expires, httpOnly: true })
@@ -29,7 +29,7 @@ export async function createSession(user: typeUser) {
 function checkPayload(payload: JWTPayload): typeUser {
     if (!("email" in payload)) { throw new TypeError("No Email Address") }
     if (!("userid" in payload)) { throw new TypeError("No Userid") }
-    const user: typeUser = { email: payload.email as string, userid: payload.userid as string }
+    const user: typeUser = { email: payload.email as string, name: payload.userid as string }
     return user
 }
 
