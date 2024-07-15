@@ -1,6 +1,11 @@
 services:
   frontend-container:
-    build: .
     image: frontend-image:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env.local
     expose:
       - 3000
+    volumes:
+      - .:/frontend

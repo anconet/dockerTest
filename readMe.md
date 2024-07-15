@@ -7,6 +7,12 @@ A simple repo for trying out docker
 - Mongo DB Express for a gui into Mongo DB
 - Nginx for a reverse proxy to hide everything.
 
+## Todo
+---
+- Production
+    - build Frontend and run out the container.
+    - nginx port forward
+
 ## Docker Install
 
 See [Notes on Docker Install](https://github.com/anconet/notes/blob/docker.md)
