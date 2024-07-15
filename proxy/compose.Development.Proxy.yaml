@@ -1,5 +1,10 @@
 services:
   nginx-container:
-    image: nginx
+    image: nginx:0.0.1
     ports:
       - 80:80
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
