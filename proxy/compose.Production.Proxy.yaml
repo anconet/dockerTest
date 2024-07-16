@@ -3,3 +3,8 @@ services:
     image: nginx
     ports:
       - 80:80
+    #build:
+    #  context: .
+    #  dockerfile: dockerfile
+    volumes:
+      - .:/etc/nginx/conf.d
