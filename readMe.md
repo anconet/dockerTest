@@ -15,7 +15,7 @@ A simple repo for trying out docker
 
 ## Docker Install
 
-See [Notes on Docker Install](https://github.com/anconet/notes/blob/docker.md)
+See [Notes on Docker Install](https://github.com/anconet/notes/blob/main/docker.md)
 
 ## Front End Setup
 ---
